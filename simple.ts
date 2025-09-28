@@ -10,12 +10,44 @@
 // const db = new DatabaseSync("biosample.sqlite");
 // const conn = new SqliteConnection(db);
 
-// 450 us (but over tcp as unix socket errors)
+// 420 us
 import { RemoteConnection } from "./shared.ts";
 const kvmserverguest = Deno.dlopen("libkvmserverguest.so", {
   remote_resume: { parameters: ["buffer", "usize"], result: "void" },
 });
 const conn = new RemoteConnection(kvmserverguest.symbols.remote_resume);
+
+// // 170 us
+// import { BUFFER_SIZE, RemoteConnection, SqliteConnection } from "./shared.ts";
+// import { DatabaseSync } from "node:sqlite";
+// const db = new DatabaseSync("biosample.sqlite");
+// const conn2 = new SqliteConnection(db);
+// const conn = new RemoteConnection((buf, _len) => {
+//   if (buf === null) {
+//     return;
+//   }
+//   const bufptr = Deno.UnsafePointer.of(buf);
+//   if (bufptr === null) {
+//     return;
+//   }
+//   const arrayBuffer = Deno.UnsafePointerView.getArrayBuffer(
+//     bufptr,
+//     BUFFER_SIZE,
+//   );
+//   // const arrayBuffer = (buf as Uint8Array).buffer;
+//   const size_buffer = new Uint32Array(arrayBuffer, 0, 1);
+//   const [size] = size_buffer;
+//   const request_buffer = new Uint8Array(
+//     arrayBuffer,
+//     size_buffer.byteLength,
+//     size,
+//   );
+//   const key = new TextDecoder().decode(request_buffer.slice(0, size));
+//   const value = conn2.get(key) ?? "";
+//   const response_buffer = new Uint8Array(arrayBuffer, size_buffer.byteLength);
+//   const { written } = new TextEncoder().encodeInto(value, response_buffer);
+//   size_buffer[0] = written;
+// });
 
 const ids = [
   "/awards/UM1HG009411/",
