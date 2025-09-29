@@ -49,6 +49,10 @@ const conn = new RemoteConnection(kvmserverguest.symbols.remote_resume);
 //   size_buffer[0] = written;
 // });
 
+// // 470 us (storage not in kvmserve)
+// import { UnixConnection } from "./libc.ts";
+// const conn = new UnixConnection("data.sock");
+
 const ids = [
   "/awards/UM1HG009411/",
   "/biosample-types/cell_line_EFO_0001182/",

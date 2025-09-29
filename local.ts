@@ -20,6 +20,10 @@ const kvmserverguest = Deno.dlopen("libkvmserverguest.so", {
 });
 const conn = new RemoteConnection(kvmserverguest.symbols.remote_resume);
 
+// // 1090 us / 1110 us (remote not under kvmserver or under)
+// import { UnixConnection } from "./libc.ts";
+// const conn = new UnixConnection("data.sock");
+
 function handler(_req: Request): Response {
   const href = "/biosamples/ENCBS435HZC/";
   using cache = new Cache(conn);

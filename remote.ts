@@ -26,7 +26,7 @@ while (true) {
     size_buffer.byteLength,
     size,
   );
-  const key = new TextDecoder().decode(request_buffer.slice(0, size));
+  const key = new TextDecoder().decode(request_buffer);
   const value = conn.get(key) ?? "";
   const response_buffer = new Uint8Array(arrayBuffer, size_buffer.byteLength);
   const { written } = new TextEncoder().encodeInto(value, response_buffer);
